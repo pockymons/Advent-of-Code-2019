@@ -13,9 +13,8 @@ def parse_wire_paths(file_name):
     with open(file_name) as f:
         return [parse_wire_path(line) for line in f]
 
-def get_next_wire_turn_point(current_point, wire_edge):
-    direction = wire_edge[0]
-    magnitude = int(wire_edge[1:])
+def get_next_wire_step(current_point, direction):
+    magnitude = 1
     if direction == 'U':
         return (current_point[0], current_point[1] + magnitude)
     if direction == 'D':
@@ -26,38 +25,15 @@ def get_next_wire_turn_point(current_point, wire_edge):
         return (current_point[0] + magnitude, current_point[1])
     raise Exception
 
-# This function in isolation will do more than I really need for this approach
-# It'll actually get a box of points between 2 points (excluding point1, including point2); but since this will be only used for edges, it'll really only be used for a line of points
-# Probably won't use this for my next iteration of solving this problem anyways
-def get_box_of_points_between_points(point1, point2):
-    x_values = set(range(point1[0], point2[0]))
-    x_values.discard(point1[0])
-    x_values.add(point2[0])
-    y_values = set(range(point1[1], point2[1]))
-    y_values.discard(point1[1])
-    y_values.add(point2[1])
-
-    return {(x, y) for x in x_values for y in y_values}
-
 def get_wire_points(wire_path):
     current_point = (0, 0)
     wire_points = set()
-    total = 0
-    total1 = 0
     for wire_edge in wire_path:
-        next_point = get_next_wire_turn_point(current_point, wire_edge)
-        t0 = timeit.default_timer()
-        temp = get_box_of_points_between_points(current_point, next_point)
-        t01 = timeit.default_timer()
-        for p in temp:
-            wire_points.add(p)
-        # wire_points = wire_points.union(temp)
-        t1 = timeit.default_timer()
-        total += t1 - t0
-        total1 = t01 - t0
-        current_point = next_point
-    print(total)
-    print(total1)
+        direction = wire_edge[0]
+        magnitude = int(wire_edge[1:])
+        for _ in range(magnitude):
+            current_point = get_next_wire_step(current_point, direction)
+            wire_points.add(current_point)
     return wire_points
 
 def calculate_manhattan_distance(p, q):
