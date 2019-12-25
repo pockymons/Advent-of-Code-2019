@@ -1,9 +1,10 @@
 import sys
 import timeit
 
+# Attempt #2
 # The general idea is to get the set of points (relative to the central port) that each wire goes through.
 # Then, get the intersection of the sets and iterate through that to find the closest point to the central port.
-# With this attempt, I calculate the endpoints for each wire line and use them to get each grid point
+# With this attempt, I calculate the step through the endpoints to get the endpoints for each segment of the wire
 
 def parse_wire_path(line):
     return line.replace('\n', '').split(',')
@@ -41,10 +42,22 @@ def get_box_of_points_between_points(point1, point2):
 def get_wire_points(wire_path):
     current_point = (0, 0)
     wire_points = set()
+    total = 0
+    total1 = 0
     for wire_edge in wire_path:
         next_point = get_next_wire_turn_point(current_point, wire_edge)
-        wire_points.update(get_box_of_points_between_points(current_point, next_point))
+        t0 = timeit.default_timer()
+        temp = get_box_of_points_between_points(current_point, next_point)
+        t01 = timeit.default_timer()
+        for p in temp:
+            wire_points.add(p)
+        # wire_points = wire_points.union(temp)
+        t1 = timeit.default_timer()
+        total += t1 - t0
+        total1 = t01 - t0
         current_point = next_point
+    print(total)
+    print(total1)
     return wire_points
 
 def calculate_manhattan_distance(p, q):
