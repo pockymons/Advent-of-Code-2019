@@ -1,9 +1,9 @@
 import sys
 import timeit
 
-# Brute force solution
 # The general idea is to get the set of points (relative to the central port) that each wire goes through.
 # Then, get the intersection of the sets and iterate through that to find the closest point to the central port.
+# With this attempt, I calculate the endpoints for each wire line and use them to get each grid point
 
 def parse_wire_path(line):
     return line.replace('\n', '').split(',')
@@ -25,7 +25,7 @@ def get_next_wire_turn_point(current_point, wire_edge):
         return (current_point[0] + magnitude, current_point[1])
     raise Exception
 
-# This function in isolation will do more than I really need for this brute force approach...
+# This function in isolation will do more than I really need for this approach
 # It'll actually get a box of points between 2 points (excluding point1, including point2); but since this will be only used for edges, it'll really only be used for a line of points
 # Probably won't use this for my next iteration of solving this problem anyways
 def get_box_of_points_between_points(point1, point2):
