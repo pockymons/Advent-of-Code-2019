@@ -1,3 +1,10 @@
+# Refactored my solution from Day 2 when working on Day 5
+# After looking at some other Python solutions on Reddit, I think I may have overengineered it a bit...
+# The main source of the extra lines/complexity on my solution is probably the boilerplate for creating new classes
+
+# It feels like cheating to refactor after looking at other solutions...
+# So I'll continue with this general structure for now and see whether I was right to do it this way or not
+
 class IntcodeComputer:
     def __init__(self, raw_memory):
         self.memory = Memory(raw_memory)
